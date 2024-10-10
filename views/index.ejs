@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Music</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="container">
+    <h1>My Playlist</h1>
+    
+    
+    <form action="/upload" method="POST" enctype="multipart/form-data">
+      <input type="text" name="title" placeholder="Music Title" required>
+      <input type="file" name="musicFile" accept="audio/*" required>
+      <button type="submit">Upload</button>
+    </form>
+
+    <ul class="music-list">
+      <% musicList.forEach(music => { %>
+        <li>
+          <strong><%= music.title %></strong>
+          <button onclick="playMusic('<%= music.filePath %>')">Play</button>
+          <form action="/toggle-favorite/<%= music.id %>" method="POST" style="display: inline;">
+            <button type="submit">
+              <%= music.favorite ? 'Unfavorite' : 'Favorite' %>
+            </button>
+          </form>
+        </li>
+      <% }) %>
+    </ul>
+    
+    
+    <audio id="audioPlayer" controls>
+      <source id="audioSource" src="" type="audio/mpeg">
+    </audio>
+  </div>
+
+  <script>
+    function playMusic(src) {
+      const audioPlayer = document.getElementById("audioPlayer");
+      const audioSource = document.getElementById("audioSource");
+      audioSource.src = src;
+      audioPlayer.load();
+      audioPlayer.play();
+    }
+  </script>
+</body>
+</html>
